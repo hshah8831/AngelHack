@@ -9,6 +9,7 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.ContentBody;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -17,8 +18,9 @@ import org.apache.http.impl.client.HttpClients;
 
 public class DummyClass {
 	private String apikey = "e92d3e29-a835-4b3c-a6fe-97be1c6dcee0";
+	private String scene_photo = "document_scan";
 	private String url_ocrdocument = "https://api.idolondemand.com/1/api/sync/ocrdocument/v1";
-	private String filesrc="D:\\hw3\\hw3.pdf";
+	private String filesrc="D:\\receipt325.JPG";
 
 	public void post1(){
 		
@@ -30,10 +32,12 @@ public class DummyClass {
 		    File f = new File(filesrc);
 		    FileBody fileBody = new FileBody(f);
 		    StringBody apikeyStringBody = new StringBody(apikey, ContentType.TEXT_PLAIN);
+		    StringBody SCENE_PHOTO = new StringBody(scene_photo, ContentType.TEXT_PLAIN);
 		
 		    HttpEntity reqEntity = MultipartEntityBuilder.create()
 			    .addPart("file", fileBody)
 			    .addPart("apikey", apikeyStringBody)
+			    .addPart("mode", SCENE_PHOTO)
 			    .build();
 		
 		    httppost.setEntity(reqEntity);
