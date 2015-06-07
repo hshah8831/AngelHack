@@ -1,3 +1,5 @@
+<%@page import="edu.neu.angelhack.entity.User"%>
+<%@page import="edu.neu.angelhack.manager.UserDAO"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"
 	import="edu.neu.angelhack.*,java.util.*,java.math.*" %>
@@ -32,20 +34,21 @@
 						<strong class="">Login</strong>
 					</div>
 					<div class="panel-body">
-						<form action="DonorLogIn.jsp" class="form-horizontal">
+						<form action="UserLogIn.jsp" class="form-horizontal">
 							<%
 								String action = request.getParameter("action");
 								String uName = request.getParameter("nUserName");
 								String pwd = request.getParameter("nPassword");
-
+							
 								if ("login".equals(action)) {
 									
 									UserDAO dao = new UserDAO();
-									User u = dao.UserLogin(uName, pwd);
+									User u = dao.userLogin(uName, pwd);
 
 									if (u != null) {
-										session.setAttribute("userName", u.getUserName());
-										response.sendRedirect("UserLandingPage.jsp");
+										session = request.getSession(true);
+										session.setAttribute("username", u.getUserName());
+										response.sendRedirect("Upload.jsp");
 									}
 
 									else {

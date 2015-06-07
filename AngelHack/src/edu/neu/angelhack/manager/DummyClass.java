@@ -163,7 +163,7 @@ public class DummyClass {
 				key+=" "+word;
 				type=posswords.get(word);
 			}
-			else if(word.toLowerCase().equals("lb"));
+			else if(word.trim().toLowerCase().equals("lb"));
 			else {
 				ArrayList<String> allpermuts = modifyWordToClosestMeaning(word,posswords,similarchars);
 				String t = getMinimumDictanceWord(word,allpermuts,posswords).trim();
@@ -330,7 +330,7 @@ public class DummyClass {
 			ans=ans.trim();
 			if(ans.matches("\\d+(\\.\\d+)*") || ans.trim().equals("")) continue;
 			//System.out.println(ans);
-			h.put(ans,arr[arr.length-1].equals("") ? "1.00" : arr[arr.length-1]);
+			h.put(ans,(arr[arr.length-1].equals("") || arr[arr.length-1].equals("Lb"))? "1.00" : arr[arr.length-1]);
 		}
 		Iterator itr = h.keySet().iterator();
 		String result="";

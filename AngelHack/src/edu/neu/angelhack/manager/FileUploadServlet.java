@@ -4,6 +4,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -13,6 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
 import edu.neu.angelhack.entity.Item;
+import edu.neu.angelhack.entity.Tran;
+import edu.neu.angelhack.entity.User;
 
 @SuppressWarnings("serial")
 @WebServlet(urlPatterns = "/fileUpload")
@@ -27,6 +31,8 @@ public class FileUploadServlet extends HttpServlet {
 	@SuppressWarnings("resource")
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		String user = request.getParameter("username");
+		System.out.println("********"+user);
 		for (Part part : request.getParts()) {
 			System.out.println(part.getName());
 			InputStream is = request.getPart(part.getName()).getInputStream();
@@ -43,7 +49,7 @@ public class FileUploadServlet extends HttpServlet {
 				DummyClass dc = new DummyClass();
 				String raw = dc.post1(fileName);
 				String result = dc.textParser(raw);
-				saveItem(result);
+				saveItem(result,user);
 //				dc.getCropImage(fileName);
 //				dc.post1(fileName);
 //				dc.post1(fileName);
@@ -75,18 +81,32 @@ public class FileUploadServlet extends HttpServlet {
 		doGet(request, response);
 	}
 
-	public static void saveItem(String result) {
+	public static void saveItem(String result,String user) {
 		ItemDAO id = new ItemDAO();
 		String str[] = result.split("\n");
+		User u = new User();
+		
+		UserDAO udao = new UserDAO();
+		ArrayList<Item> items = new ArrayList<Item>();
 		
 		for (int i = 0; i < str.length; i++) {
 			String[] words = str[i].split("[*]{2}");// ("**");
 			Item item = new Item();
 			item.setCategory(words[2]);
-			item.setItemAmount(new BigDecimal(words[1]));
-			item.setItemId(Integer.parseInt(words[0]));
-			id.insertItem(item);
+			String val = words[1].trim().toString();
+			System.out.println(val);
+			BigDecimal big = new BigDecimal(val);
+			item.setItemAmount(big);
+			item.setItemName(words[0]);
+			items.add(item);
 		}
+		Tran t = new Tran();
+		t.setItems(items);
+		u = udao.getUser(user);
+		t.setUser(u);
+
+		TranDAO td = new TranDAO();
+		td.insertTran(t);
 	}
 
 }

@@ -1,5 +1,8 @@
+<%@page import="edu.neu.angelhack.entity.User"%>
+<%@page import="edu.neu.angelhack.manager.UserDAO"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+	pageEncoding="ISO-8859-1"
+	import="edu.neu.angelhack.*,java.util.*,java.math.*" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -12,35 +15,6 @@
 	src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 </head>
 <body>
-
-	<%
-		String action = request.getParameter("action");
-		String name = request.getParameter("name");
-		String username = request.getParameter("username");
-		String password = request.getParameter("password");
-		String email = request.getParameter("email");
-		String street = request.getParameter("street");
-		String city = request.getParameter("city");
-		String state = request.getParameter("state");
-		String country = request.getParameter("country");
-		String gender = request.getParameter("select");
-
-		if ("submit".equals(action)) {
-
-			Integer zipcode = Integer.parseInt(request
-					.getParameter("zipcode"));
-			
-			//Random rand = new Random();
-			//int randomNumAddress = rand.nextInt((100 - 1) + 1) + 1;
-
-		
-			//Insert into the database.
-
-//			session.setAttribute("userName", p.getUserName());
-
-			response.sendRedirect("UserLandingPage.jsp");
-		}
-	%>
 	<div class="container">
 		<br /> <br />
 		<h4>Please fill the below fields to signup</h4>
@@ -80,31 +54,6 @@
 						style="width: 250px;"></td>
 				</tr>
 				<tr>
-					<td>Street Address</td>
-					<td><input type="text" name="street" class="form-control"
-						style="width: 250px;"></td>
-				</tr>
-				<tr>
-					<td>City</td>
-					<td><input type="text" name="city" class="form-control"
-						style="width: 250px;"></td>
-				</tr>
-				<tr>
-					<td>State</td>
-					<td><input type="text" name="state" class="form-control"
-						style="width: 250px;"></td>
-				</tr>
-				<tr>
-					<td>Country</td>
-					<td><input type="text" name="country" class="form-control"
-						style="width: 250px;"></td>
-				</tr>
-				<tr>
-					<td>ZipCode</td>
-					<td><input type="text" name="zipcode" class="form-control"
-						style="width: 250px;"></td>
-				</tr>
-				<tr>
 					<td>
 						<button type="submit" name="action" value="submit"
 							class="btn btn-primary">Signup</button>
@@ -112,6 +61,30 @@
 				</tr>
 			</table>
 		</form>
+		<%
+		String action = request.getParameter("action");
+		String name = request.getParameter("name");
+		String username = request.getParameter("username");
+		String password = request.getParameter("password");
+		String email = request.getParameter("email");
+		String gender = request.getParameter("select");
+
+		if ("submit".equals(action)) {
+
+			//Insert into the database.
+			UserDAO dao = new UserDAO();
+			User user = new User();
+			
+			user.setUserName(username);
+			user.setPassWord(password);
+			dao.insertUser(user);
+			
+
+			session.setAttribute("username", username);
+
+			response.sendRedirect("Upload.jsp");
+		}
+	%>
 	</div>
 </body>
 </html>

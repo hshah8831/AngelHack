@@ -37,11 +37,11 @@ body {
 <body>
 	<div class="navbar navbar-default navbar-static-top">
 		<div class="container">
-			<a href="DonorLogIn.jsp" class="navbar-brand">Chaanda</a>
+			<a href="UserLogIn.jsp" class="navbar-brand">Chaanda</a>
 			<div class="collapse navbar-collapse navHeaderCollapse">
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="DonorLogIn.jsp">Home</a></li>
-					<li><a href="DonorLogOut.jsp">Logout</a></li>
+					<li><a href="UserLogIn.jsp">Home</a></li>
+					<li><a href="UserLogOut.jsp">Logout</a></li>
 				</ul>
 			</div>
 		</div>
