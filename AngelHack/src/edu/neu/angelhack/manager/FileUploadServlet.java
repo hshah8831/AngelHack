@@ -24,7 +24,8 @@ public class FileUploadServlet extends HttpServlet {
     super(); 
   }
 
-  protected void doGet(HttpServletRequest request, 
+  @SuppressWarnings("resource")
+protected void doGet(HttpServletRequest request, 
       HttpServletResponse response) throws ServletException, IOException { 
     for (Part part : request.getParts()) { 
       System.out.println(part.getName()); 
@@ -38,14 +39,24 @@ public class FileUploadServlet extends HttpServlet {
       FileOutputStream os = new FileOutputStream("" + fileName); 
       os.write(b); 
       is.close(); 
+      try {
       DummyClass dc = new DummyClass();
-      dc.post1(fileName);
+      String raw = dc.post1(fileName);
+      HashMap<String,String> h = new HashMap<String,String>();
+      HashMap<String,String> keyvaluepair = new HashMap<String,String>();
+      
+		dc.textParser(raw, keyvaluepair,h);
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
       
     }
 
   }
 
-  private String getFileName(Part part) { 
+  @SuppressWarnings("unused")
+private String getFileName(Part part) { 
     String partHeader = part.getHeader("content-disposition"); 
     //logger.info("Part Header = " + partHeader); 
     for (String cd : part.getHeader("content-disposition").split(";")) { 

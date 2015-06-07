@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+	pageEncoding="ISO-8859-1"
+	import="edu.neu.angelhack.*,java.util.*,java.math.*"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -36,17 +37,17 @@
 								String uName = request.getParameter("nUserName");
 								String pwd = request.getParameter("nPassword");
 
-								/*if ("login".equals(action)) {
+								if ("login".equals(action)) {
 
-									StudentDAO dao = new StudentDAO();
-									Person p = dao.universityLogin(uName, pwd);
+									UserDAO dao = new UserDAO();
+									User u = dao.UserLogin(uName, pwd);
 
-									if (p != null) {
-										session.setAttribute("userName", p.getUserName());
+									if (u != null) {
+										session.setAttribute("userName", u.getUserName());
 										response.sendRedirect("UserLandingPage.jsp");
 									}
 
-									else {*/
+									else {
 							%>
 							<h6 class="text-danger">
 								<%
@@ -54,12 +55,12 @@
 								%>
 							</h6>
 							<%
-								/*}
+								}
 								}
 
 								if ("cancel".equals(action)) {
-									response.sendRedirect("UserLogIn.jsp");*/
-								//}
+									response.sendRedirect("UserLogIn.jsp");
+								}
 							%>
 							<div class="form-group">
 								<label for="nUserName" class="col-sm-3 control-label">Username</label>
