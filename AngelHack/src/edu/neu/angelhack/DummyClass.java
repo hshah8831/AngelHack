@@ -20,7 +20,7 @@ public class DummyClass {
 	private String apikey = "e92d3e29-a835-4b3c-a6fe-97be1c6dcee0";
 	private String scene_photo = "document_scan";
 	private String url_ocrdocument = "https://api.idolondemand.com/1/api/sync/ocrdocument/v1";
-	private String filesrc="D:\\receipt325.JPG";
+	private String filesrc="D:\\SaturdayMayten08.JPG";
 
 	public void post1(){
 		
