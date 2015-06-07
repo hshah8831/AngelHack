@@ -22,6 +22,8 @@ public class Item implements Serializable {
 
 	private BigDecimal itemAmount;
 
+	private String itemName;
+
 	//bi-directional many-to-one association to Tran
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="TranId")
@@ -52,6 +54,14 @@ public class Item implements Serializable {
 
 	public void setItemAmount(BigDecimal itemAmount) {
 		this.itemAmount = itemAmount;
+	}
+
+	public String getItemName() {
+		return this.itemName;
+	}
+
+	public void setItemName(String itemName) {
+		this.itemName = itemName;
 	}
 
 	public Tran getTran() {

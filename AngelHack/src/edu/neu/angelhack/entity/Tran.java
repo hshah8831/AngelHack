@@ -3,6 +3,7 @@ package edu.neu.angelhack.entity;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 
@@ -18,6 +19,9 @@ public class Tran implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int tranId;
+
+	@Temporal(TemporalType.DATE)
+	private Date date;
 
 	private BigDecimal tranAmount;
 
@@ -39,6 +43,14 @@ public class Tran implements Serializable {
 
 	public void setTranId(int tranId) {
 		this.tranId = tranId;
+	}
+
+	public Date getDate() {
+		return this.date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
 	}
 
 	public BigDecimal getTranAmount() {

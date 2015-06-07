@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"
-	import="edu.neu.angelhack.*,java.util.*,java.math.*"%>
+	import="edu.neu.angelhack.*,java.util.*,java.math.*" %>
+	
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -14,7 +15,7 @@
 <body>
 	<div class="navbar navbar-default navbar-static-top">
 		<div class="container">
-			<a href="ChaandaHomePage.jsp" class="navbar-brand">Money Manager</a>
+			<a href="UserLogIn.jsp" class="navbar-brand">Money Manager</a>
 			<div class="collapse navbar-collapse navHeaderCollapse">
 				<ul class="nav navbar-nav navbar-right">
 					<li><a href="UserLogIn.jsp">Home</a></li>
@@ -38,7 +39,7 @@
 								String pwd = request.getParameter("nPassword");
 
 								if ("login".equals(action)) {
-
+									
 									UserDAO dao = new UserDAO();
 									User u = dao.UserLogin(uName, pwd);
 

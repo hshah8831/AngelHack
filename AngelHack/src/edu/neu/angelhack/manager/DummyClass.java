@@ -1,7 +1,9 @@
 package edu.neu.angelhack.manager;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Iterator;
 
 import org.apache.http.HttpEntity;
@@ -14,12 +16,13 @@ import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.imageio.ImageIO;
 
 import org.json.*;
 
@@ -33,6 +36,7 @@ public class DummyClass {
 	public String post1(String filesrc) {
 
 		CloseableHttpClient httpclient = HttpClients.createDefault();
+		String output = new String();
 
 		try {
 			HttpPost httppost = new HttpPost(url_ocrdocument);
@@ -58,11 +62,22 @@ public class DummyClass {
 
 				System.out.println(response.getStatusLine());
 				HttpEntity entity = response.getEntity();
+				StringBuilder out = new StringBuilder();
 				if (entity != null) {
-					String jsonstr = entity.toString();
-					String output = convertStringToJson(jsonstr);
-					entity.writeTo(System.out);
-					return output;
+					InputStream input = entity.getContent();
+					BufferedReader rdr = new BufferedReader(new InputStreamReader(input));
+					//StringWriter s =new StringWriter();
+					//IOUtils.copy(input, s,"");
+					String line = "";
+					while((line = rdr.readLine())!= null)
+					{
+						out.append(line);
+					}
+					
+					String jsonstr = out.toString();
+					output = convertStringToJson(jsonstr);
+					//entity.writeTo(System.out);
+					//return output;
 				}
 
 			} catch (ClientProtocolException cpe) {
@@ -83,21 +98,25 @@ public class DummyClass {
 				e.printStackTrace();
 			}
 		}
-		return null;
+		return output;
 	}
 
 	public String convertStringToJson(String jsonstr) {
+		String str = null;
+		System.out.println(jsonstr);
 		try {
 			JSONObject obj = new JSONObject(jsonstr);
-			String str;
+			
 			str = obj.getJSONArray("text_block").getJSONObject(0)
 					.getString("text");
-			return(str);
+			//return(str);
+			
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return null;
+		return str;
+		
 	}
 
 	public static HashMap<String,String> fetchWordsFromFile() throws Exception
@@ -258,9 +277,39 @@ public class DummyClass {
 		}
 		return words;
 	}
+	
+	public void getCropImage(String fileName) throws IOException {
+		   int offsetFromLeft = 0;
+		   int offsetFromTop = 0;
+		   String fls[] = fileName.split("\\\\");
+		   String dotSplit[] = fls[fls.length-1].split(".");
+		   String basePath = "";
+		   for(int i=0; i < fls.length-1; i++)
+		   {
+		      basePath+= fls[i] + "\\";
+		   }
+		   String newPath_shop = basePath + dotSplit[0] + "_shop."+dotSplit[1];// "C:\\Vardhman-Drive\\Untitled1_shop.JPG";
+		   String newPath_data = basePath + dotSplit[0] + "_data."+dotSplit[1];
+		   String imageFormat = "jpg";
+		   BufferedImage image = ImageIO.read(new File(fileName));
+		   int height = image.getHeight();
+		   int width = image.getWidth();
+		   int widthOfNewImage = width;
+		   int heightOfShop = (int)(.20 * height);
+		   int heightOfData = (int)(.80 * height);
+		   System.out.println("Height : " + height + "\nWidth : " + width);
+		   BufferedImage out_shop = image.getSubimage(offsetFromLeft, offsetFromTop,
+		         widthOfNewImage, heightOfShop);
+		   BufferedImage out_data = image.getSubimage(offsetFromLeft, heightOfShop,
+		         widthOfNewImage, heightOfData);
+		   ImageIO.write(out_shop, imageFormat, new File(newPath_shop));
+		   ImageIO.write(out_data, imageFormat, new File(newPath_data));
+		   
+	}
 
-	public void textParser(String text, HashMap<String,String> keyvalpair, HashMap<String,String> h) throws Exception
+	public String textParser(String text) throws Exception
 	{
+		HashMap<String,String> h = new HashMap<String,String>();
 		String textspc = text.replaceAll("\\\\n","|");
 		String initclear="[^\\w\\d\\. \\$|]+";
 		String regex="([\\w\\d\\s\\.]+[\\s]+[$\\d]+([\\.][\\d]+)?)";
@@ -269,6 +318,7 @@ public class DummyClass {
 
 		Pattern p= Pattern.compile(regex);
 		Matcher m = p.matcher(newtext);
+		HashMap<String,String> keyvalpair = new HashMap<String,String>();
 		while(m.find())
 		{
 			//System.out.println(m.group(1));
@@ -291,6 +341,7 @@ public class DummyClass {
 		}
 		result=result.substring(0, result.length()-1);
 		System.out.println(result);
+		return(result);
 		/*BufferedReader br = new BufferedReader(new FileReader(new File("words.txt")));
 		PrintWriter pw = new PrintWriter("AllWords.txt");
 		String line="";
